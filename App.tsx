@@ -1,57 +1,93 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+
+const Tab = createBottomTabNavigator();
+
+//Screens
+const HomeScreen = () => (
+  <View style={styles.center}>
+    <Text style={styles.text}>Welcome to the Home Screen!</Text>
+  </View>
+);
+
+const SearchScreen = () => (
+  <View style={styles.center}>
+    <Text style={styles.text}>Search something here</Text>
+  </View>
+);
+
+const ProfileScreen = () => (
+<View style={styles.center}>
+    <Text style={styles.text}>This is your Profile.</Text>
+  </View>
+);
+
+const SettingsScreen = () => (
+<View style={styles.center}>
+    <Text style={styles.text}>Adjust your settings here.</Text>
+  </View>
+);
+
+const HelpScreen = () => (
+<View style={styles.center}>
+    <Text style={styles.text}>How can we help you?</Text>
+  </View>
+);
 
 export default function App() {
-  const handlePress = (label) => {
-    alert(`You pressed ${label}`);
-  };
-
   return (
-    <View style={styles.container}>
-      {/* Main content area */}
-      <View style={styles.main}>
-        <Text style={styles.title}>Welcome to the Home Page!</Text>
-      </View>
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
 
-      {/* Navigation Buttons */}
-      <View style={styles.bottomBar}>
-        {['Home', 'Search', 'Profile', 'Settings', 'Help'].map((label) => (
-          <TouchableOpacity key={label} style={styles.button} onPress={() => handlePress(label)}>
-            <Text style={styles.buttonText}>{label}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
-  );
-}
+            switch (route.name) {
+              case 'Home':
+                iconName = 'home-outline';
+                break;
+              case 'Search':
+                iconName = 'search-outline';
+                break;
+              case 'Profile':
+                iconName = 'profile-outline';
+                break;
+              case 'Settings':
+                iconName = 'settings-outline';
+                break;
+              case 'Help':
+                iconName = 'help-outline';
+                break;
+              default:
+                iconName = 'ellipse-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#007AFF',
+          tabBarInactiveTintColor: 'gray',
+        })}
+        >
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Search" component={SearchScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Help" component={HelpScreen} />
+        </Tab.Navigator>
+    </NavigationContainer>
+  )
+};
 
 const styles = StyleSheet.create({
-  container: {
+  center: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  main: {
-    flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center'
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#f9f9f9',
-  },
-  button: {
-    padding: 10,
-  },
-  buttonText: {
-    fontSize: 14,
-    color: '#007AFF',
+  text: {
+    fontSize: 20,
   },
 });
